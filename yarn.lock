@@ -756,7 +756,7 @@
   resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-3.0.4.tgz#6d5640021906d35e5572c186c3f35b4e7a93c247"
   integrity sha512-v80CTa8r2GQswsw89AUVqmUVA1HPWk0W3wLKUAOkCJCy/xETtwOnOPQiQ1DMsToR1nkcnM+r6nDYfwTaOeeQrg==
 
-"@vue/cli-plugin-babel@^3.0.0":
+"@vue/cli-plugin-babel@^3.0.4":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@vue/cli-plugin-babel/-/cli-plugin-babel-3.0.4.tgz#f2e4a12f498e285fdc605ad29df4b9b0d4a0eb10"
   integrity sha512-JpA0fu1eYSaMGxqRgE6NKb29up10PGXYQ2hbUtiVsdZRgHTdx2uuEwCiPoi9icIt7Mh6SdQZADLEiDYZtnK2Dg==
@@ -765,7 +765,7 @@
     "@vue/babel-preset-app" "^3.0.4"
     babel-loader "^8.0.0-0"
 
-"@vue/cli-plugin-eslint@^3.0.0":
+"@vue/cli-plugin-eslint@^3.0.4":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-3.0.4.tgz#0c62607c44a3b63fc730fdc0dd0ad5165bc559f6"
   integrity sha512-6B1IbCPXTu2DvEugDiEFkg5WGjIJ/82MXdHS1J+lYlI2u5ooVNJ6DjHerdpHpCxmM4dBoDNNLI57ZcLFGyv/KA==
@@ -776,7 +776,7 @@
     eslint-loader "^2.0.0"
     eslint-plugin-vue "^4.5.0"
 
-"@vue/cli-service@^3.0.0":
+"@vue/cli-service@^3.0.4":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.0.4.tgz#0084569470a742a3c9adf32e8815c4760eaafd96"
   integrity sha512-Z7kA6r0DQOvJUZmgK6yHixk8AxekTK04pU/YkRgzhIzz+giZ6913fQ1RrsDWsUzEjlh0FneKx1eMo0eDq79zvQ==

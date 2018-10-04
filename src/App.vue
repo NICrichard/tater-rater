@@ -24,27 +24,20 @@ export default {
       showMe: false,
       mood: "",
       isActive: 0,
-      final: false
+      final: false,
+      id: "",
+      token: ""
     };
   },
   methods: {
-    event: function() {
-      this.final = true;
-      var msg =
-        "<p>The user said they were <strong>" +
-        this.mood +
-        "</strong> about the app.</p>";
-      if ($("textarea#feedbackText").val() !== "") {
-        msg +=
-          "<p>Their additional feedback:<br><em>" +
-          $("textarea#feedbackText").val() +
-          "</em></p>";
-      } else {
-        msg += "<p>No additional feedback left.</p>";
-      }
-      document.getElementById("response").innerHTML = msg;
+    guidGenerator: function() {
+      var S4 = function() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      };
+      return S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4();
     },
     clicked: function(mood) {
+      let self = this;
       if (mood === "happy") {
         this.isActive = 1;
       } else if (mood === "meh") {
@@ -56,8 +49,13 @@ export default {
       }
       this.mood = mood;
       this.showMe = true;
+      var myMood = mood;
+      setTimeout(function() {
+        self.callOut();
+      }, 3000);
     },
     msg: function() {
+      let self = this;
       var myMood = this.mood.toString();
       this.final = true;
       setTimeout(function() {
@@ -74,23 +72,51 @@ export default {
           msg += "<p>No additional feedback left.</p>";
         }
         document.getElementById("response").innerHTML = msg;
-      }, 3000);
+      }, 1500);
+      setTimeout(function() {
+        self.callOut();
+      }, 1500);
+    },
+    callOut: function() {
+      var headers = {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": "*",
+        "X-Content-Type-Options": "nosniff"
+      };
       axios
         .post(
           "https://y1dtrwmk40.execute-api.us-east-1.amazonaws.com/UAT/RateMyTater-test",
           {
-            id: "12343589abcd",
-            rating: myMood,
+            id: this.id,
+            token: this.token,
+            rating: this.mood.toString(),
             text: $("textarea#feedbackText").val()
-          }
+          },
+          headers
         )
         .then(response => {
-          console.log("RESPONSE: " + response);
+          console.log(response);
         })
         .catch(e => {
           console.log("ERROR: " + e);
         });
+    },
+    tokenGetter: function() {
+      // if (localStorage.getItem("accessidaho")) {
+      //  this.token = localStorage.getItem("accessidaho");
+      // } else {
+      var rand = Math.random()
+        .toString(36)
+        .substr(2);
+      var token = rand + rand;
+      localStorage.setItem("accessidaho", token);
+      return token;
+      // }
     }
+  },
+  created() {
+    this.id = this.guidGenerator();
+    this.token = this.tokenGetter();
   }
 };
 </script>
