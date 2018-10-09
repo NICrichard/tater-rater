@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container">
+    <div v-show="nonReviewer">
     <div class="row text-center"><h2>How would you rate us?</h2></div>
         <div class="row text-center">
             <i :class="{'flaticon-happiness':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i>
@@ -8,6 +9,8 @@
         </div>
         <div class="row" v-show="showMe"><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @focus="msg"></textarea></div>
         <div id="response" v-show="final"></div>
+    </div>
+    <div v-show="!nonReviewer"><h2>Sorry, you've already reviewed the app!</h2></div>
   </div>
 </template>
 
@@ -16,26 +19,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "jquery/src/jquery.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import axios from "axios";
-let $ = jQuery;
+var $ = jQuery;
 export default {
   name: "app",
-  data() {
+  data: function() {
     return {
       showMe: false,
       mood: "",
       isActive: 0,
       final: false,
-      id: "",
-      token: ""
+      token: "",
+      nonReviewer: false
     };
   },
   methods: {
-    guidGenerator: function() {
-      var S4 = function() {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-      };
-      return S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4();
-    },
     clicked: function(mood) {
       let self = this;
       if (mood === "happy") {
@@ -55,7 +52,7 @@ export default {
       }, 3000);
     },
     msg: function() {
-      let self = this;
+      var self = this;
       var myMood = this.mood.toString();
       this.final = true;
       setTimeout(function() {
@@ -87,7 +84,6 @@ export default {
         .post(
           "https://y1dtrwmk40.execute-api.us-east-1.amazonaws.com/UAT/RateMyTater-test",
           {
-            id: this.id,
             token: this.token,
             rating: this.mood.toString(),
             text: $("textarea#feedbackText").val()
@@ -102,21 +98,29 @@ export default {
         });
     },
     tokenGetter: function() {
-      // if (localStorage.getItem("accessidaho")) {
-      //  this.token = localStorage.getItem("accessidaho");
-      // } else {
-      var rand = Math.random()
-        .toString(36)
-        .substr(2);
-      var token = rand + rand;
-      localStorage.setItem("accessidaho", token);
-      return token;
-      // }
+      var cur = new Date();
+      if (
+        localStorage.getItem("accessidaho") &&
+        localStorage.getItem("ai-exp") >= cur.getDate() + 30
+      ) {
+        this.token = localStorage.getItem("accessidaho");
+        console.log("token --> " + this.token);
+        // MOVE ALONG REDIRECT HERE .....
+      } else {
+        this.nonReviewer = true;
+        var after30 = cur.setDate(cur.getDate() + 30);
+        var rand = Math.random()
+          .toString(36)
+          .substr(2);
+        var token = rand + rand;
+        localStorage.setItem("accessidaho", token);
+        localStorage.setItem("ai-exp", after30);
+        this.token = token;
+      }
     }
   },
-  created() {
-    this.id = this.guidGenerator();
-    this.token = this.tokenGetter();
+  created: function() {
+    this.tokenGetter();
   }
 };
 </script>
