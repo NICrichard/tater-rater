@@ -1,16 +1,15 @@
 <template>
   <div id="app" class="container">
-    <div v-show="nonReviewer">
-    <div class="row text-center"><h2>How would you rate us?</h2></div>
-        <div class="row text-center">
-            <i :class="{'flaticon-happiness':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i>
-            <i :class="{'flaticon-meh':true, 'selected':(isActive === 2)}" @click="clicked('meh')"></i>
-            <i :class="{'flaticon-sad':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i>
-        </div>
-        <div class="row" v-show="showMe"><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @focus="msg"></textarea></div>
-        <div id="response" v-show="final"></div>
-    </div>
-    <div v-show="!nonReviewer"><h2>Sorry, you've already reviewed the app!</h2></div>
+    <div v-show="nonReviewer" class="row text-center">
+      <div class="col-12"><h2>How would you rate us?</h2></div>
+          <div class="row">
+              <div class="col-md-4"><i :class="{'flaticon-happiness':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i></div>
+              <div class="col-md-4"><i :class="{'flaticon-meh':true, 'selected':(isActive === 2)}" @click="clicked('meh')"></i></div>
+              <div class="col-md-4"><i :class="{'flaticon-sad':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i></div>
+          </div>
+          <div class="row" v-show="showMe"><label class="sr-only" for="feedback comments">Feedback comments</label><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @focus="msg" aria-label="feedback comments"></textarea></div>
+      </div>
+    <div v-show="!nonReviewer" class="row text-center"><h2>Thanks, you've already reviewed the app!</h2></div>
   </div>
 </template>
 
@@ -27,7 +26,6 @@ export default {
       showMe: false,
       mood: "",
       isActive: 0,
-      final: false,
       token: "",
       nonReviewer: false
     };
@@ -47,29 +45,22 @@ export default {
       this.mood = mood;
       this.showMe = true;
       var myMood = mood;
+      var cur = new Date();
+      var after30 = cur.setDate(cur.getDate() + 30);
+      var rand = Math.random()
+        .toString(36)
+        .substr(2);
+      var token = rand + rand;
+      localStorage.setItem("accessidaho", token);
+      localStorage.setItem("ai-exp", after30);
+      this.token = token;
       setTimeout(function() {
         self.callOut();
-      }, 3000);
+      }, 1500);
     },
     msg: function() {
       var self = this;
       var myMood = this.mood.toString();
-      this.final = true;
-      setTimeout(function() {
-        var msg =
-          "<p>The user said they were <strong>" +
-          myMood +
-          "</strong> about the app.</p>";
-        if ($("textarea#feedbackText").val() !== "") {
-          msg +=
-            "<p>Their additional feedback:<br><em>" +
-            $("textarea#feedbackText").val() +
-            "</em></p>";
-        } else {
-          msg += "<p>No additional feedback left.</p>";
-        }
-        document.getElementById("response").innerHTML = msg;
-      }, 1500);
       setTimeout(function() {
         self.callOut();
       }, 1500);
@@ -90,9 +81,7 @@ export default {
           },
           headers
         )
-        .then(response => {
-          console.log(response);
-        })
+        .then(response => {})
         .catch(e => {
           console.log("ERROR: " + e);
         });
@@ -104,18 +93,8 @@ export default {
         localStorage.getItem("ai-exp") >= cur.getDate() + 30
       ) {
         this.token = localStorage.getItem("accessidaho");
-        console.log("token --> " + this.token);
-        // MOVE ALONG REDIRECT HERE .....
       } else {
         this.nonReviewer = true;
-        var after30 = cur.setDate(cur.getDate() + 30);
-        var rand = Math.random()
-          .toString(36)
-          .substr(2);
-        var token = rand + rand;
-        localStorage.setItem("accessidaho", token);
-        localStorage.setItem("ai-exp", after30);
-        this.token = token;
       }
     }
   },
@@ -138,7 +117,7 @@ export default {
 @import "icons/flaticon.css";
 
 .container {
-  width: 500px;
+  max-width: 500px;
   height: auto;
   border: 3px solid black;
   background-color: azure;
