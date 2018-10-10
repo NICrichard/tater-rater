@@ -7,7 +7,11 @@
               <div class="col-md-4"><i :class="{'flaticon-meh':true, 'selected':(isActive === 2)}" @click="clicked('meh')"></i></div>
               <div class="col-md-4"><i :class="{'flaticon-sad':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i></div>
           </div>
-          <div class="row" v-show="showMe"><label class="sr-only" for="feedback comments">Feedback comments</label><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @focus="msg" aria-label="feedback comments"></textarea></div>
+          <div class="row" v-show="showMe">
+            <div class="col-xs-12">
+                <label class="sr-only" for="feedback comments">Feedback comments</label><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @focus="msg" aria-label="feedback comments"></textarea>
+            </div>
+          </div>
       </div>
     <div v-show="!nonReviewer" class="row text-center"><h2>Thanks, you've already reviewed the app!</h2></div>
   </div>
