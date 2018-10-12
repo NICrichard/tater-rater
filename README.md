@@ -1,4 +1,4 @@
-# tater-rater
+# feedback
 
 ## Project setup
 ```

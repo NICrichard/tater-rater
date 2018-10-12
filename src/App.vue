@@ -1,11 +1,11 @@
 <template>
   <div id="app" class="container">
     <div v-show="nonReviewer" class="row text-center">
-      <div class="col-12"><h2>How would you rate us?</h2></div>
+      <div class="col-12"><h1 class="question">How would you rate your experience?</h1></div>
           <div class="row">
-              <div class="col-md-4"><i :class="{'flaticon-happiness':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i></div>
-              <div class="col-md-4"><i :class="{'flaticon-meh':true, 'selected':(isActive === 2)}" @click="clicked('meh')"></i></div>
-              <div class="col-md-4"><i :class="{'flaticon-sad':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i></div>
+              <div class="col-md-4"><i :class="{'flaticon-smiley':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i></div>
+              <div class="col-md-4"><i :class="{'flaticon-anger':true, 'selected':(isActive === 2)}" @click="clicked('meh')"></i></div>
+              <div class="col-md-4"><i :class="{'flaticon-sad-smiley':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i></div>
           </div>
           <div class="row" v-show="showMe">
             <div class="col-xs-12">
@@ -13,7 +13,7 @@
             </div>
           </div>
       </div>
-    <div v-show="!nonReviewer" class="row text-center"><h2>Thanks, you've already reviewed the app!</h2></div>
+    <div v-show="!nonReviewer" class="row text-center"><h2>Thanks for your review!</h2></div>
   </div>
 </template>
 
@@ -31,7 +31,8 @@ export default {
       mood: "",
       isActive: 0,
       token: "",
-      nonReviewer: false
+      nonReviewer: false,
+      changes: ""
     };
   },
   methods: {
@@ -49,25 +50,22 @@ export default {
       this.mood = mood;
       this.showMe = true;
       var myMood = mood;
-      var cur = new Date();
-      var after30 = cur.setDate(cur.getDate() + 30);
-      var rand = Math.random()
-        .toString(36)
-        .substr(2);
-      var token = rand + rand;
-      localStorage.setItem("accessidaho", token);
-      localStorage.setItem("ai-exp", after30);
-      this.token = token;
       setTimeout(function() {
+        if (this.changes >= 0) {
+          this.changes = this.changes + 1;
+        }
         self.callOut();
-      }, 1500);
+      }, 2000);
     },
     msg: function() {
       var self = this;
       var myMood = this.mood.toString();
       setTimeout(function() {
+        if (this.changes >= 0) {
+          this.changes = this.changes + 1;
+        }
         self.callOut();
-      }, 1500);
+      }, 2000);
     },
     callOut: function() {
       var headers = {
@@ -75,27 +73,55 @@ export default {
         "Access-Control-Allow-Origin": "*",
         "X-Content-Type-Options": "nosniff"
       };
-      axios
-        .post(
-          "https://y1dtrwmk40.execute-api.us-east-1.amazonaws.com/UAT/RateMyTater-test",
-          {
-            token: this.token,
-            rating: this.mood.toString(),
-            text: $("textarea#feedbackText").val()
-          },
-          headers
-        )
-        .then(response => {})
-        .catch(e => {
-          console.log("ERROR: " + e);
-        });
+      if (this.token !== "") {
+        axios
+          .post(
+            "https://y1dtrwmk40.execute-api.us-east-1.amazonaws.com/UAT/RateMyTater-test",
+            {
+              tater_id: this.token,
+              rating: this.mood.toString(),
+              text: $("textarea#feedbackText").val(),
+              ip: "127.0.0.1",
+              referrer: "the_rainbow",
+              app: "testing_app",
+              changes: this.changes
+            },
+            headers
+          )
+          .then(response => {
+            console.log(response);
+            this.token = response.data.tater_id;
+            localStorage.setItem("accessidaho", this.token);
+          })
+          .catch(e => {
+            console.log("ERROR: " + e);
+          });
+      } else {
+        axios
+          .post(
+            "https://y1dtrwmk40.execute-api.us-east-1.amazonaws.com/UAT/RateMyTater-test",
+            {
+              rating: this.mood.toString(),
+              text: $("textarea#feedbackText").val(),
+              ip: "127.0.0.1",
+              referrer: "the_rainbow",
+              app: "testing_app"
+            },
+            headers
+          )
+          .then(response => {
+            console.log(response);
+            this.token = response.data.tater_id;
+            this.changes = response.data.changes;
+            localStorage.setItem("accessidaho", this.token);
+          })
+          .catch(e => {
+            console.log("ERROR: " + e);
+          });
+      }
     },
     tokenGetter: function() {
-      var cur = new Date();
-      if (
-        localStorage.getItem("accessidaho") &&
-        localStorage.getItem("ai-exp") >= cur.getDate() + 30
-      ) {
+      if (localStorage.getItem("accessidaho")) {
         this.token = localStorage.getItem("accessidaho");
       } else {
         this.nonReviewer = true;
@@ -151,15 +177,7 @@ textarea {
   color: #012b72;
 }
 
-#response {
-  margin: auto;
-  width: 50%;
-  height: auto;
-  background-color: #efefef;
-  color: #000;
-  font-size: 1.5em;
-  padding: 20px;
-  display: block;
-  margin-top: 20px;
+.question {
+  font-size: 2.5rem;
 }
 </style>
