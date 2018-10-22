@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container">
-    <div v-show="nonReviewer" class="row text-center">
+    <div class="row text-center">
       <div class="col-12"><h1 class="question">How would you rate your experience?</h1></div>
           <div class="row">
               <div class="col-md-4"><i :class="{'flaticon-smiley':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i></div>
@@ -13,14 +13,13 @@
             </div>
           </div>
       </div>
-    <div v-show="!nonReviewer" class="row text-center"><h2>Thanks for your review!</h2></div>
   </div>
 </template>
 
 <script>
-import "bootstrap/dist/css/bootstrap.min.css";
-import "jquery/src/jquery.js";
-import "bootstrap/dist/js/bootstrap.min.js";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "jquery/src/jquery.js";
+// import "bootstrap/dist/js/bootstrap.min.js";
 import axios from "axios";
 var $ = jQuery;
 export default {
@@ -31,7 +30,6 @@ export default {
       mood: "",
       isActive: 0,
       token: "",
-      nonReviewer: false,
       changes: ""
     };
   },
@@ -49,7 +47,7 @@ export default {
       }
       this.mood = mood;
       this.showMe = true;
-      var myMood = mood;
+      // var myMood = mood;
       setTimeout(function() {
         if (this.changes >= 0) {
           this.changes = this.changes + 1;
@@ -59,7 +57,7 @@ export default {
     },
     msg: function() {
       var self = this;
-      var myMood = this.mood.toString();
+      // var myMood = this.mood.toString();
       setTimeout(function() {
         if (this.changes >= 0) {
           this.changes = this.changes + 1;
@@ -89,12 +87,12 @@ export default {
             headers
           )
           .then(response => {
-            console.log(response);
+            // console.log(response);
             this.token = response.data.tater_id;
             localStorage.setItem("accessidaho", this.token);
           })
           .catch(e => {
-            console.log("ERROR: " + e);
+            console.error(e);
           });
       } else {
         axios
@@ -110,21 +108,19 @@ export default {
             headers
           )
           .then(response => {
-            console.log(response);
+            // console.log(response);
             this.token = response.data.tater_id;
             this.changes = response.data.changes;
             localStorage.setItem("accessidaho", this.token);
           })
           .catch(e => {
-            console.log("ERROR: " + e);
+            console.error(e);
           });
       }
     },
     tokenGetter: function() {
       if (localStorage.getItem("accessidaho")) {
         this.token = localStorage.getItem("accessidaho");
-      } else {
-        this.nonReviewer = true;
       }
     }
   },
