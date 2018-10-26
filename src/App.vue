@@ -9,7 +9,7 @@
           </div>
           <div class="row" v-show="showMe">
             <div class="col-xs-12">
-                <label class="sr-only" for="feedback comments">Feedback comments</label><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @focus="msg" aria-label="feedback comments"></textarea>
+                <label class="sr-only" for="feedback comments">Feedback comments</label><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @blur="msg" aria-label="feedback comments"></textarea>
             </div>
           </div>
       </div>
@@ -17,9 +17,10 @@
 </template>
 
 <script>
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "jquery/src/jquery.js";
-// import "bootstrap/dist/js/bootstrap.min.js";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "jquery/src/jquery.js";
+import "bootstrap/dist/js/bootstrap.min.js";
+
 import axios from "axios";
 var $ = jQuery;
 export default {
@@ -47,23 +48,17 @@ export default {
       }
       this.mood = mood;
       this.showMe = true;
-      // var myMood = mood;
-      setTimeout(function() {
-        if (this.changes >= 0) {
-          this.changes = this.changes + 1;
-        }
-        self.callOut();
-      }, 2000);
+      if (this.changes >= 0) {
+        this.changes = this.changes + 1;
+      }
+      self.callOut();
     },
     msg: function() {
       var self = this;
-      // var myMood = this.mood.toString();
-      setTimeout(function() {
-        if (this.changes >= 0) {
-          this.changes = this.changes + 1;
-        }
-        self.callOut();
-      }, 2000);
+      if (this.changes >= 0) {
+        this.changes = this.changes + 1;
+      }
+      self.callOut();
     },
     callOut: function() {
       var headers = {
@@ -79,15 +74,11 @@ export default {
               tater_id: this.token,
               rating: this.mood.toString(),
               text: $("textarea#feedbackText").val(),
-              ip: "127.0.0.1",
-              referrer: "the_rainbow",
-              app: "testing_app",
               changes: this.changes
             },
             headers
           )
           .then(response => {
-            // console.log(response);
             this.token = response.data.tater_id;
             localStorage.setItem("accessidaho", this.token);
           })
@@ -100,15 +91,11 @@ export default {
             "https://y1dtrwmk40.execute-api.us-east-1.amazonaws.com/UAT/RateMyTater-test",
             {
               rating: this.mood.toString(),
-              text: $("textarea#feedbackText").val(),
-              ip: "127.0.0.1",
-              referrer: "the_rainbow",
-              app: "testing_app"
+              text: $("textarea#feedbackText").val()
             },
             headers
           )
           .then(response => {
-            // console.log(response);
             this.token = response.data.tater_id;
             this.changes = response.data.changes;
             localStorage.setItem("accessidaho", this.token);
@@ -117,15 +104,12 @@ export default {
             console.error(e);
           });
       }
-    },
-    tokenGetter: function() {
-      if (localStorage.getItem("accessidaho")) {
-        this.token = localStorage.getItem("accessidaho");
-      }
     }
   },
   created: function() {
-    this.tokenGetter();
+    if (localStorage.getItem("accessidaho")) {
+      this.token = localStorage.getItem("accessidaho");
+    }
   }
 };
 </script>
@@ -158,15 +142,6 @@ export default {
 
 textarea {
   resize: none;
-}
-
-.hide {
-  display: none;
-}
-
-.foot {
-  margin-top: 10px;
-  margin-right: 15px;
 }
 
 .selected {
