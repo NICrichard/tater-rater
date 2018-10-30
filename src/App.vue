@@ -20,7 +20,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "jquery/src/jquery.js";
 import "bootstrap/dist/js/bootstrap.min.js";
-
 import axios from "axios";
 var $ = jQuery;
 export default {
@@ -74,7 +73,8 @@ export default {
               tater_id: this.token,
               rating: this.mood.toString(),
               text: $("textarea#feedbackText").val(),
-              changes: this.changes
+              changes: this.changes,
+              appName: window.appName
             },
             headers
           )
@@ -91,7 +91,8 @@ export default {
             "https://y1dtrwmk40.execute-api.us-east-1.amazonaws.com/UAT/RateMyTater-test",
             {
               rating: this.mood.toString(),
-              text: $("textarea#feedbackText").val()
+              text: $("textarea#feedbackText").val(),
+              appName: window.appName
             },
             headers
           )
