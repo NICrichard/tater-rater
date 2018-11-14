@@ -1,5 +1,10 @@
 <template>
   <div id="app" class="container">
+    <div class="row">
+      <div class="col mt-0 text-right">
+        <button class="btn btn-default" data-dismiss="modal">x</button>
+      </div>
+    </div>
     <div class="row text-center">
       <div class="col-12"><h1 class="question">How would you rate your experience?</h1></div>
           <div class="row">
@@ -13,6 +18,11 @@
             </div>
           </div>
       </div>
+       <div class="row">
+            <div class="col mr-5 text-right">
+              <button class="btn btn-primary" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
   </div>
 </template>
 
