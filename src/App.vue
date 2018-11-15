@@ -13,16 +13,14 @@
               <div class="col-md-4"><i :class="{'flaticon-sad-smiley':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i></div>
           </div>
           <div class="row" v-show="showMe">
-            <div class="col-xs-12">
+            <div class="col-xs-12 pb-5">
                 <label class="sr-only" for="feedback comments">Feedback comments</label><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @blur="msg" aria-label="feedback comments"></textarea>
+            </div>
+            <div class="col-xs-12 text-right" style="padding-top:10px">
+              <button class="btn btn-primary" data-dismiss="modal">Submit</button>
             </div>
           </div>
       </div>
-       <div class="row">
-            <div class="col mr-5 text-right">
-              <button class="btn btn-primary" data-dismiss="modal">Submit</button>
-            </div>
-        </div>
   </div>
 </template>
 
