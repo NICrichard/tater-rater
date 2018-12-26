@@ -31,29 +31,29 @@
     padding: 10px;
 }
 
-.flaticon-anger:before {
-    content: "\f100";
+.flaticon-surprised:before {
+    content: "\f102";
 }
 
-.flaticon-anger:hover {
-    content: "\f100";
+.flaticon-surprised:hover {
+    content: "\f102";
     color: rgb(205, 133, 61);
 }
 
-.flaticon-smiley:before {
-    content: "\f102";
+.flaticon-happy:before {
+    content: "\f100";
 }
 
-.flaticon-smiley:hover {
-    content: "\f102";
+.flaticon-happy:hover {
+    content: "\f100";
     color: rgb(27, 159, 27);
 }
 
-.flaticon-sad-smiley:before {
+.flaticon-sad:before {
     content: "\f101";
 }
 
-.flaticon-sad-smiley:hover {
+.flaticon-sad:hover {
     content: "\f101";
     color: rgb(211, 25, 22);
 }

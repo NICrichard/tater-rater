@@ -8,9 +8,9 @@
     <div class="row text-center">
       <div class="col-12"><h1 class="question">How would you rate your experience?</h1></div>
           <div class="row">
-              <div class="col-md-4"><i :class="{'flaticon-smiley':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i></div>
-              <div class="col-md-4"><i :class="{'flaticon-anger':true, 'selected':(isActive === 2)}" @click="clicked('meh')"></i></div>
-              <div class="col-md-4"><i :class="{'flaticon-sad-smiley':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i></div>
+              <div class="col-md-4"><i :class="{'flaticon-happy':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i></div>
+              <div class="col-md-4"><i :class="{'flaticon-surprised':true, 'selected':(isActive === 2)}" @click="clicked('meh')"></i></div>
+              <div class="col-md-4"><i :class="{'flaticon-sad':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i></div>
           </div>
           <div class="row" v-show="showMe">
             <div class="col-xs-12 pb-5">
