@@ -1,25 +1,56 @@
 <template>
-  <div id="app" class="container">
-    <div v-show="nonReviewer" class="row text-center">
-      <div class="col-12"><h1 class="question">How would you rate your experience?</h1></div>
-          <div class="row">
-              <div class="col-md-4"><i :class="{'flaticon-smiley':true, 'selected':(isActive === 1)}" @click="clicked('happy')"></i></div>
-              <div class="col-md-4"><i :class="{'flaticon-anger':true, 'selected':(isActive === 2)}" @click="clicked('meh')"></i></div>
-              <div class="col-md-4"><i :class="{'flaticon-sad-smiley':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i></div>
-          </div>
-          <div class="row" v-show="showMe">
-            <div class="col-xs-12">
-                <label class="sr-only" for="feedback comments">Feedback comments</label><textarea class="form-control" rows="3" id="feedbackText" placeholder="enter your additional feedback here" @focus="msg" aria-label="feedback comments"></textarea>
-            </div>
-          </div>
+  <div id="app" class="modalcontainer">
+    <div class="row">
+      <div class="col-12 text-right">
+        <button class="btn btn-secondary">x</button>
       </div>
-    <div v-show="!nonReviewer" class="row text-center"><h2>Thanks for your review!</h2></div>
+    </div>
+    <div v-show="nonReviewer" class="row text-center">
+      <div class="col-12">
+        <h1 class="question">How would you rate your experience?</h1>
+      </div>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-md-4">
+            <i
+              :class="{'flaticon-smile':true, 'selected':(isActive === 1)}"
+              @click="clicked('happy')"
+            ></i>
+          </div>
+          <div class="col-md-4">
+            <i
+              :class="{'flaticon-emoticon':true, 'selected':(isActive === 2)}"
+              @click="clicked('meh')"
+            ></i>
+          </div>
+          <div class="col-md-4">
+            <i :class="{'flaticon-sad':true, 'selected':(isActive === 3)}" @click="clicked('sad')"></i>
+          </div>
+        </div>
+      </div>
+      <div class="row" v-show="showMe">
+        <div class="col-xs-12">
+          <label class="sr-only" for="feedback comments">Feedback comments</label>
+          <textarea
+            class="col form-control modaltextarea"
+            rows="3"
+            id="feedbackText"
+            placeholder="enter your additional feedback here"
+            @focus="msg"
+            aria-label="feedback comments"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <div v-show="!nonReviewer" class="row text-center">
+      <h2>Thanks for your review!</h2>
+    </div>
   </div>
 </template>
 
 <script>
 import "bootstrap/dist/css/bootstrap.min.css";
-import "jquery/src/jquery.js";
+import jQuery from "jquery/src/jquery.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import axios from "axios";
 var $ = jQuery;
@@ -49,7 +80,6 @@ export default {
       }
       this.mood = mood;
       this.showMe = true;
-      var myMood = mood;
       setTimeout(function() {
         if (this.changes >= 0) {
           this.changes = this.changes + 1;
@@ -59,7 +89,6 @@ export default {
     },
     msg: function() {
       var self = this;
-      var myMood = this.mood.toString();
       setTimeout(function() {
         if (this.changes >= 0) {
           this.changes = this.changes + 1;
@@ -146,7 +175,7 @@ export default {
 
 @import "icons/flaticon.css";
 
-.container {
+.modalcontainer {
   max-width: 500px;
   height: auto;
   border: 3px solid black;
@@ -160,7 +189,7 @@ export default {
   padding-top: 20px;
 }
 
-textarea {
+.modaltextarea {
   resize: none;
 }
 
@@ -173,11 +202,27 @@ textarea {
   margin-right: 15px;
 }
 
+.row {
+  -ms-flex-wrap: wrap;
+}
+
 .selected {
   color: #012b72;
 }
 
 .question {
   font-size: 2.5rem;
+}
+
+.flaticon-emoticon,
+.flaticon-sad,
+.flaticon-smile {
+  cursor: pointer;
+}
+
+.form-control {
+  text-align: center !important;
+  margin-left: 30px !important;
+  width: 450px !important;
 }
 </style>
