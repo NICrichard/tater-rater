@@ -160,4 +160,8 @@ textarea {
 .question {
   font-size: 2.5rem;
 }
+
+.flaticon-happy, .flaticon-surprised, .flaticon-sad {
+  cursor: pointer;
+}
 </style>
